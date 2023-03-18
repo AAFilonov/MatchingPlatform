@@ -1,15 +1,16 @@
 
 <template>
-  <div>
-    <div>Result: {{ result.test }}</div>
-  </div>
-  <HelloWorld msg="Vite + Vue 22" />
+
+  <MatchingForm></MatchingForm>
+
+
 </template>
 
 
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
 import { onMounted, ref } from "vue";
+import MatchingForm from "./components/MatchingForm.vue";
 
 interface TestData {
   test: string;
