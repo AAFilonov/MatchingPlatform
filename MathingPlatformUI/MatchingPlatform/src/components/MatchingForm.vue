@@ -6,7 +6,6 @@
             v-model="problemSelected"
             :items="problemData"
             label="Problem type"
-            @select="problemOnChange"
         ></v-combobox>
 
         <v-combobox
@@ -21,14 +20,15 @@
             label="matching data file"
             outlined
         ></v-file-input>
-        
+
         <v-text-field
+            v-if="false"
             v-model="matchingName"
             :rules="this.rules"
             label="Matching name"
         ></v-text-field>
-        
-        <v-btn block class="mt-2" @click="onSubmit" type="submit">Submit</v-btn>
+
+        <v-btn block class="mt-2" type="submit" @click="onSubmit">Submit</v-btn>
       </v-form>
     </v-sheet>
   </div>
@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
+import axios from "axios";
 
 
 interface Item {
@@ -71,9 +72,9 @@ export default defineComponent({
   data: () => ({
     matchingName: '',
     problemSelected: {} as Problem,
-    algSelected: {} as Item | null,
+    algSelected: {} as Item,
     problemData: problem_data,
-    inputFile: null,
+    inputFile: null as any,
     rules: [
       (value: string) => {
         if (value) return true
@@ -81,22 +82,43 @@ export default defineComponent({
       },
     ],
   }),
+  computed: {
+    algsList() {
+      return this.problemSelected.algs;
+    },
+  },
   mounted() {
     // get supported problems algs;
     this.problemSelected = this.problemData[0];
   },
   methods: {
-    problemOnChange() {
-      this.algSelected = this.problemSelected.algs[1];
-    },
     onSubmit() {
+      var formData = new FormData();
+      let file = new File(this.$data.inputFile, this.$data.inputFile[0].name);
 
-    }
-  },
-  computed: {
-    algsList() {
-      return this.problemSelected.algs;
+      formData.append("file", file, this.$data.inputFile[0].name);
+      formData.append("matchingName", this.$data.matchingName);
+      formData.append("problemType", this.$data.problemSelected.value);
+      formData.append("algType", this.$data.algSelected.value);
+
+      console.log(formData);
+
+      //TODO реализовать системные параметры
+      axios.post(`http://localhost:5126/ImportMatching/upload`,
+          formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          }
+      )
+          .then(response => console.log(response))
+          .catch(error => console.log(error));
     },
+  },
+  watch: {
+    'problemSelected'(newVal) {
+      this.algSelected = newVal.algs[0];
+    }
   }
 })
 

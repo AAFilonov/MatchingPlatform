@@ -1,4 +1,3 @@
-
 <template>
 
   <MatchingForm></MatchingForm>
@@ -7,9 +6,8 @@
 </template>
 
 
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import { onMounted, ref } from "vue";
+<script lang="ts" setup>
+import {onMounted, ref} from "vue";
 import MatchingForm from "./components/MatchingForm.vue";
 
 interface TestData {
@@ -31,9 +29,11 @@ onMounted(async () => {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
