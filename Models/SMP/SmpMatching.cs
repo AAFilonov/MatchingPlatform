@@ -7,69 +7,78 @@ public class SmpMatching : ISmpAllocation<CommonAllocated, CommonAllocated>
     public List<CommonAllocated> men = new();
     public List<CommonAllocated> women = new();
 
+    public SmpMatching Clone()
+    {
+        var copy = new SmpMatching();
+        men.ForEach(val => copy.AddMan(val));
+        women.ForEach(val => copy.AddWoman(val));
+        return copy;
+    }
     public void assign(CommonAllocated m, CommonAllocated w)
     {
-        throw new NotImplementedException();
+        m.assigned = w;
+        w.assigned = m;
     }
 
     public void breakAssigment(CommonAllocated m, CommonAllocated w)
     {
-        throw new NotImplementedException();
+        m.assigned = null;
+        w.assigned = null;
     }
 
     public CommonAllocated? getAssignedByM(CommonAllocated m)
     {
-        throw new NotImplementedException();
+        return m.assigned;
     }
 
     public CommonAllocated? getAssignedByW(CommonAllocated w)
     {
-        throw new NotImplementedException();
+        return w.assigned;
     }
 
     public List<CommonAllocated> getMList()
     {
-        throw new NotImplementedException();
+        return men;
     }
 
     public List<CommonAllocated> getWList()
     {
-        throw new NotImplementedException();
+        return women;
     }
 
     public List<CommonAllocated> getTPreferences(CommonAllocated t)
     {
-        throw new NotImplementedException();
+        return t.preferences;
     }
 
     public List<CommonAllocated> getUPreferences(CommonAllocated u)
     {
-        throw new NotImplementedException();
+        return u.preferences;
     }
 
     public void setTPreferences(CommonAllocated t, List<CommonAllocated> pref)
     {
-        throw new NotImplementedException();
+        t.preferences = pref;
     }
 
     public void setTPreferencePair(CommonAllocated t, CommonAllocated u)
     {
-        throw new NotImplementedException();
+        t.preferences.Add(u);
     }
 
     public void setUPreferences(CommonAllocated u, List<CommonAllocated> pref)
     {
-        throw new NotImplementedException();
+        u.preferences = pref;
     }
 
     public void setUPreferencePair(CommonAllocated u, CommonAllocated t)
     {
-        throw new NotImplementedException();
+        u.preferences.Add(t);
     }
 
     public void deleteFromTPref(CommonAllocated t, CommonAllocated u)
     {
-        throw new NotImplementedException();
+        t.preferences.Remove(u);
     }
 
     public void AddMan(CommonAllocated t)

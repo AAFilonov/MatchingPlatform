@@ -35,12 +35,10 @@ public class ImportMatchingController : ControllerBase
         var matching = (SmpMatching)_importMatchingService.ImportAndExecute(fileStream, problemType, algType);
 
         _logger.Log(LogLevel.Information, "Matching {} was processed successfully? return JSON value", file.FileName);
-        //var t = new { men = matching.men, women = matching.women };
-        //var t2 = new { men = matching.men, women = matching.women };
-        //
-        var json = JsonConvert.SerializeObject(new { data = matching }, Formatting.Indented);
-        //var json2 = JsonConvert.SerializeObject(matching.men,Formatting.Indented);
-        //var json3 = JsonConvert.SerializeObject(new CommonAllocated("D"),Formatting.Indented);
+        var json = JsonConvert.SerializeObject(new { data = matching }, Formatting.Indented,new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
         return Ok(json);
     }
 }

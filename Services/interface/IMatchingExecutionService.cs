@@ -2,5 +2,5 @@
 
 public interface IMatchingExecutionService
 {
-    public object Execute(object matching, string objectTypeCode);
+    public object Execute(object matching, string algTypeCode);
 }

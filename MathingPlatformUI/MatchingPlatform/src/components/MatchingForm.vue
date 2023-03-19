@@ -47,7 +47,7 @@ interface Item {
 interface Problem extends Item {
   algs: Item[];
 }
-
+//TODO получать поддерижваемые проблемы и алгоритмы с бэка 
 const problem_data: Problem[] = [
   {
     title: 'Stable marriage problem',

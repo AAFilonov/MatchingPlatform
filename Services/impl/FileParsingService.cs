@@ -34,20 +34,56 @@ public class SmpParser
         var matching = new SmpMatching();
 
         var worksheet1 = package.Workbook.Worksheets[0];
-        for (var row = 1; row < worksheet1.Dimension.End.Row; row++)
+        for (var row = 1; row <= worksheet1.Dimension.End.Row; row++)
         {
+           if( (string)worksheet1.Cells[row, 1].Value==null)
+               break;
             var man = ParseRow(worksheet1, row);
             matching.AddMan(man);
         }
 
         var worksheet2 = package.Workbook.Worksheets[1];
-        for (var row = 1; row < worksheet2.Dimension.End.Row; row++)
+        for (var row = 1; row <= worksheet2.Dimension.End.Row; row++)
         {
+            if( (string)worksheet2.Cells[row, 1].Value==null)
+                break;
             var woman = ParseRow(worksheet2, row);
             matching.AddWoman(woman);
         }
+        
+        syncPreferences(matching);
 
         return matching;
+    }
+
+    private static void syncPreferences(SmpMatching matching)
+    {
+        matching.men.ForEach(man =>
+        {
+            matching.women.ForEach(woman =>
+            {
+                var manIndexInPref = woman.preferences.FindIndex(val => val.name == man.name);
+                if (manIndexInPref != -1)
+                {
+                    woman.preferences.RemoveAt(manIndexInPref);
+                    woman.preferences.Insert(manIndexInPref, man);
+                }
+
+            });
+        });
+
+        matching.women.ForEach(woman =>
+        {
+            matching.men.ForEach(man =>
+            {
+                var womanIndexInPref = man.preferences.FindIndex(val => val.name == woman.name);
+                if (womanIndexInPref != -1)
+                {
+                    man.preferences.RemoveAt(womanIndexInPref);
+                    man.preferences.Insert(womanIndexInPref, woman);
+                }
+            });
+        });
     }
 
     private static CommonAllocated ParseRow(ExcelWorksheet worksheet, int row)
