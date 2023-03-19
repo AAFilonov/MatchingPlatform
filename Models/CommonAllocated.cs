@@ -15,12 +15,9 @@ public class CommonAllocated
 
     public string name { get; set; }
     public CommonAllocated? assigned { get; set; }
-    public string assignedName {
-        get
-        {
-            return assigned?.name ?? "";
-        }
-    }
+
+    public string assignedName => assigned?.name ?? "";
+
     public List<CommonAllocated> preferences { get; set; } = new();
 
     public override string ToString()

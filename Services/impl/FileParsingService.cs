@@ -17,12 +17,14 @@ public class FileParsingService : IFileParsingService
         _logger = logger;
     }
 
-    public object ParseTableFile(MemoryStream file, string problemCode)
+    public object ParseTableFile(MemoryStream file, string problemTypeCode)
     {
         //прочесть расширение и ументь преобразовать разные типы файла в ExcelPackage
         //получать параметр с типом задачи и подставлять разные парсеры
         var package = new ExcelPackage(file);
-        return SmpParser.ParseMatching(package);
+        var matching = SmpParser.ParseMatching(package);
+        matching.problemType = problemTypeCode;
+        return matching;
     }
 }
 
@@ -36,8 +38,8 @@ public class SmpParser
         var worksheet1 = package.Workbook.Worksheets[0];
         for (var row = 1; row <= worksheet1.Dimension.End.Row; row++)
         {
-           if( (string)worksheet1.Cells[row, 1].Value==null)
-               break;
+            if ((string)worksheet1.Cells[row, 1].Value == null)
+                break;
             var man = ParseRow(worksheet1, row);
             matching.AddMan(man);
         }
@@ -45,12 +47,12 @@ public class SmpParser
         var worksheet2 = package.Workbook.Worksheets[1];
         for (var row = 1; row <= worksheet2.Dimension.End.Row; row++)
         {
-            if( (string)worksheet2.Cells[row, 1].Value==null)
+            if ((string)worksheet2.Cells[row, 1].Value == null)
                 break;
             var woman = ParseRow(worksheet2, row);
             matching.AddWoman(woman);
         }
-        
+
         syncPreferences(matching);
 
         return matching;
@@ -68,7 +70,6 @@ public class SmpParser
                     woman.preferences.RemoveAt(manIndexInPref);
                     woman.preferences.Insert(manIndexInPref, man);
                 }
-
             });
         });
 

@@ -27,15 +27,16 @@ public class ImportMatchingController : ControllerBase
         var problemType = (string?)fromData["problemType"] ?? "Unknown";
         var algType = (string?)fromData["algType"] ?? "Unknown";
 
-        _logger.Log(LogLevel.Information, "Accepting matching upload - problem={}, alg={},  filename={}", problemType,
+        _logger.Log(LogLevel.Information, 1, "Accepting matching upload - problem={}, alg={},  filename={}",
+            problemType,
             algType, file.FileName);
 
         await using var fileStream = new MemoryStream();
         await file.CopyToAsync(fileStream);
         var matching = (SmpMatching)_importMatchingService.ImportAndExecute(fileStream, problemType, algType);
 
-        _logger.Log(LogLevel.Information, "Matching {} was processed successfully? return JSON value", file.FileName);
-        var json = JsonConvert.SerializeObject(new { data = matching }, Formatting.Indented,new JsonSerializerSettings
+        _logger.Log(LogLevel.Information, 1,"Matching {} was processed successfully? return JSON value", file.FileName);
+        var json = JsonConvert.SerializeObject(new { data = matching }, Formatting.Indented, new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         });

@@ -6,14 +6,8 @@ public class SmpMatching : ISmpAllocation<CommonAllocated, CommonAllocated>
 {
     public List<CommonAllocated> men = new();
     public List<CommonAllocated> women = new();
+    public string problemType { get; set; }
 
-    public SmpMatching Clone()
-    {
-        var copy = new SmpMatching();
-        men.ForEach(val => copy.AddMan(val));
-        women.ForEach(val => copy.AddWoman(val));
-        return copy;
-    }
     public void assign(CommonAllocated m, CommonAllocated w)
     {
         m.assigned = w;
@@ -79,6 +73,14 @@ public class SmpMatching : ISmpAllocation<CommonAllocated, CommonAllocated>
     public void deleteFromTPref(CommonAllocated t, CommonAllocated u)
     {
         t.preferences.Remove(u);
+    }
+
+    public SmpMatching Clone()
+    {
+        var copy = new SmpMatching();
+        men.ForEach(val => copy.AddMan(val));
+        women.ForEach(val => copy.AddWoman(val));
+        return copy;
     }
 
     public void AddMan(CommonAllocated t)
